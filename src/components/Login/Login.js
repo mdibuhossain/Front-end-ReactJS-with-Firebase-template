@@ -1,14 +1,14 @@
-import { Button, CircularProgress, FormControl, Input, InputLabel, Typography } from '@mui/material';
+import { Button, CircularProgress, FormControl, Input, InputLabel, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useFirebase } from '../../Hooks/useFirebase';
-import gym1 from '../../assets/gym1.jpg';
 import { selectIsLoading } from '../../features/isloadingSlice';
 import { selectUser } from '../../features/userSlice';
+import gym1 from '../../assets/gym1.jpg';
 
-const LogIn = () => {
+const Login = () => {
     const { logIn, Redirect } = useFirebase();
     const [userInput, setUserInput] = useState({});
     const isLoading = useSelector(selectIsLoading);
@@ -30,30 +30,32 @@ const LogIn = () => {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <Box sx={{ p: 8, width: "500px" }}>
-                <form onSubmit={handleLogin}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-                        <Box sx={{ mb: 5 }}>
-                            <img style={{ width: 'calc(100% - 50px)' }} src={gym1} alt="" />
+                <Paper sx={{ p: 6 }} elevation={3}>
+                    <form onSubmit={handleLogin}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+                            <Box sx={{ mb: 5 }}>
+                                <img style={{ width: 'calc(100% - 50px)' }} src={gym1} alt="" />
+                            </Box>
+                            <FormControl variant="standard">
+                                <InputLabel>Email</InputLabel>
+                                <Input onChange={handleUserInput} value={userInput.email} name="email" type="email" />
+                            </FormControl>
+                            <FormControl variant="standard" sx={{ mt: 3 }}>
+                                <InputLabel>Password</InputLabel>
+                                <Input onChange={handleUserInput} value={userInput.password} name="password" type="password" />
+                            </FormControl>
+                            <Button type="submit" variant="contained" sx={{ mt: 8 }}>
+                                {
+                                    isLoading ? <CircularProgress color="inherit" size="25px" /> : 'Login'
+                                }
+                            </Button>
+                            <Typography variant='subtitle' sx={{ mt: 1 }}>Don't have an account? <NavLink to="/register">Sign up</NavLink></Typography>
                         </Box>
-                        <FormControl variant="standard">
-                            <InputLabel>Email</InputLabel>
-                            <Input onBlur={handleUserInput} name="email" type="email" />
-                        </FormControl>
-                        <FormControl variant="standard" sx={{ mt: 3 }}>
-                            <InputLabel>Password</InputLabel>
-                            <Input onChange={handleUserInput} name="password" type="password" />
-                        </FormControl>
-                        <Button type="submit" variant="contained" sx={{ mt: 8 }}>
-                            {
-                                isLoading ? <CircularProgress color="inherit" size="25px" /> : 'Login'
-                            }
-                        </Button>
-                        <Typography variant='subtitle' sx={{ mt: 1 }}>Don't have an account? <NavLink to="/register">Sign up</NavLink></Typography>
-                    </Box>
-                </form>
+                    </form>
+                </Paper>
             </Box>
         </Box>
     );
 };
 
-export default LogIn;
+export default Login;

@@ -6,7 +6,6 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import LogIn from './components/Login/LogIn';
 import PageNotFound from './components/PageNotFound/PageNotFound';
 import RequireAuth from './components/ProtectedRoute/RequireAuth';
 import Home from './components/Home/Home';
@@ -15,6 +14,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import AddProduct from './components/Dashboard/AddProduct';
 import ManageProducts from './components/Dashboard/ManageProducts';
 import ManageOrders from './components/Dashboard/ManageOrders';
+import Login from './components/Login/Login';
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
           <Route path="/login" element={
             <>
               <Navigation />
-              <LogIn />
+              <Login />
               <Footer />
             </>
           } />

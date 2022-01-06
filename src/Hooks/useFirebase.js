@@ -16,7 +16,7 @@ export const useFirebase = () => {
 
     const Redirect = () => {
         console.log(location);
-        const destination = location?.state?.from?.pathname || -1;
+        const destination = location?.state?.from?.pathname || '/';
         navigate(destination);
     }
 

@@ -1,1 +1,1 @@
-# Fitness project
+# ReactJS Template with Firebase auth
