@@ -78,7 +78,7 @@ const Settings = () => {
                     <form>
                         <Box sx={{ m: 3, display: 'grid', rowGap: '25px' }}>
                             <TextField onChange={handleChangeData} defaultValue={userNewData?.displayName} name="displayName" label="New name" variant="outlined" />
-                            <TextField label="Photo URL (optional)" variant="outlined" />
+                            {/* <TextField label="Photo URL (optional)" variant="outlined" /> */}
                             <Button disabled={!userNewData?.displayName} variant="contained">Update</Button>
                         </Box>
                     </form>
