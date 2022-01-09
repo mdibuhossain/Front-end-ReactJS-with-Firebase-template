@@ -15,40 +15,19 @@ import AddProduct from './components/Dashboard/AddProduct';
 import ManageProducts from './components/Dashboard/ManageProducts';
 import ManageOrders from './components/Dashboard/ManageOrders';
 import Login from './components/Login/Login';
+import Settings from './components/Profile/Settings';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Navigation />
         <Routes>
-          <Route path="/" element={
-            <>
-              <Navigation />
-              <Home />
-              <Footer />
-            </>
-          } />
-          <Route path="/home" element={
-            <>
-              <Navigation />
-              <Home />
-              <Footer />
-            </>
-          } />
-          <Route path="/login" element={
-            <>
-              <Navigation />
-              <Login />
-              <Footer />
-            </>
-          } />
-          <Route path="/register" element={
-            <>
-              <Navigation />
-              <Register />
-              <Footer />
-            </>
-          } />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/settings" element={<RequireAuth><Settings /></RequireAuth>} />
           <Route path="/dashboard" element={<RequireAuth>
             <Dashboard />
           </RequireAuth>}>
@@ -58,6 +37,7 @@ function App() {
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

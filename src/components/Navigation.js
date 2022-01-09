@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { useFirebase } from '../Hooks/useFirebase';
 import { selectUser } from '../features/userSlice';
 import { selectIsLoading } from '../features/isloadingSlice';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 
 const pages = [
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navigation = () => {
     const { logOut } = useFirebase();
+    const location = useLocation();
     const user = useSelector(selectUser);
     const isLoading = useSelector(selectIsLoading)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -79,148 +80,132 @@ const Navigation = () => {
 
     const navList = (
         <>
-            <NavLink to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <MenuItem
-                    onClick={handleCloseNavMenu}
-                >
-                    <Typography variant='button'>
-                        home
-                    </Typography>
-                </MenuItem>
-            </NavLink>
-            <NavLink to="/schedule" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <MenuItem
-                    onClick={handleCloseNavMenu}
-                >
-                    <Typography variant='button'>
-                        Schedule
-                    </Typography>
-                </MenuItem>
-            </NavLink>
-            <NavLink to="/classes" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <MenuItem
-                    onClick={handleCloseNavMenu}
-                >
-                    <Typography variant='button'>
-                        Classes
-                    </Typography>
-                </MenuItem>
-            </NavLink>
-            <NavLink to="/contact" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <MenuItem
-                    onClick={handleCloseNavMenu}
-                >
-                    <Typography variant='button'>
-                        Contact us
-                    </Typography>
-                </MenuItem>
-            </NavLink>
+            {
+                pages.map((item, index) => (
+                    <NavLink to={item.to} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <MenuItem
+                            onClick={handleCloseNavMenu}
+                        >
+                            <Typography variant='button'>
+                                {item.title}
+                            </Typography>
+                        </MenuItem>
+                    </NavLink>
+                ))
+            }
         </>
     )
-
     const classes = useStyles();
-    return (
-        <AppBar position="fixed" className={classes[navRef.current]}>
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-                    >
-                        FITNESS
-                    </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
+    if (!location?.pathname?.includes('dashboard'))
+        return (
+            <AppBar position="fixed" className={classes[navRef.current]}>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
+                            FITNESS
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleOpenNavMenu}
+                                color="inherit"
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorElNav}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                open={Boolean(anchorElNav)}
+                                onClose={handleCloseNavMenu}
+                                sx={{
+                                    display: { xs: 'block', md: 'none' },
+                                }}
+                            >
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    {navList}
+                                </Box>
+                            </Menu>
+                        </Box>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                         >
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                {navList}
-                            </Box>
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-                    >
-                        FITNESS
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {navList}
-                    </Box>
-                    {
-                        user?.email ? (
-                            <Box sx={{ flexGrow: 0 }}>
-                                <Typography variant='button' sx={{ display: 'inline', mr: 2 }}>{user.displayName}</Typography>
-                                <Tooltip title="Open settings">
-                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        {isLoading ? <CircularProgress color="inherit" />
-                                            : <Avatar alt="avatar" src={user.photoURL} />
-                                        }
-                                    </IconButton>
-                                </Tooltip>
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
-                                    <NavLink style={{ textDecoration: 'none', color: 'inherit' }} to="/dashboard">
-                                        <MenuItem onClick={handleCloseUserMenu}>
-                                            Dashboard
-                                        </MenuItem>
-                                    </NavLink>
-                                    <Typography sx={{ color: 'inherit' }} onClick={logOut}>
-                                        <MenuItem onClick={handleCloseUserMenu}>
-                                            Log out
-                                        </MenuItem>
-                                    </Typography>
-                                </Menu>
-                            </Box>
-                        ) : <NavLink to='/login' style={{ textDecoration: 'none', color: 'inherit' }}><Button variant=''>Login</Button></NavLink>
-                    }
-                </Toolbar>
-            </Container>
-        </AppBar>
-    );
+                            FITNESS
+                        </Typography>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            {navList}
+                        </Box>
+                        {
+                            user?.email ? (
+                                <Box sx={{ flexGrow: 0 }}>
+                                    <Typography variant='button' sx={{ display: 'inline', mr: 2 }}>{user.displayName}</Typography>
+                                    <Tooltip title="Open settings">
+                                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                            {isLoading ? <CircularProgress color="inherit" />
+                                                : <Avatar alt="avatar" src={user.photoURL} />
+                                            }
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Menu
+                                        sx={{ mt: '45px' }}
+                                        id="menu-appbar"
+                                        anchorEl={anchorElUser}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(anchorElUser)}
+                                        onClose={handleCloseUserMenu}
+                                    >
+                                        <NavLink style={{ textDecoration: 'none', color: 'inherit' }} to="/dashboard">
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                Dashboard
+                                            </MenuItem>
+                                        </NavLink>
+                                        <NavLink style={{ textDecoration: 'none', color: 'inherit' }} to="/settings">
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                Settings
+                                            </MenuItem>
+                                        </NavLink>
+                                        <Typography sx={{ color: 'inherit' }} onClick={logOut}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                Log out
+                                            </MenuItem>
+                                        </Typography>
+                                    </Menu>
+                                </Box>
+                            ) : <NavLink to='/login' style={{ textDecoration: 'none', color: 'inherit' }}><Button variant=''>Login</Button></NavLink>
+                        }
+                    </Toolbar>
+                </Container>
+            </AppBar>
+        );
+    return null;
 };
 export default Navigation;
