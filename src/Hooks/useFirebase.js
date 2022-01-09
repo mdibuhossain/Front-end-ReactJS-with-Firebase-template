@@ -1,5 +1,6 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth'
-import { useEffect } from 'react';
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { setIsLoading } from '../features/isloadingSlice';
@@ -13,22 +14,24 @@ export const useFirebase = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const [updateCount, setUpdateCount] = useState(0);
+    const storage = getStorage();
     const Redirect = () => {
         console.log(location);
         const destination = location?.state?.from?.pathname || '/';
         navigate(destination);
     }
 
-    const signWithGoogle = () => {
+    const uploadAvatar = async (file) => {
+        const fileRef = ref(storage, 'avatar/' + auth?.currentUser?.uid + '.png');
         dispatch(setIsLoading(true));
-        const googleProvider = new GoogleAuthProvider();
-        signInWithPopup(auth, googleProvider)
-            .then(authUser => {
-                dispatch(login({ ...authUser.user }));
-                Redirect();
-            }).catch(error => alert(error.message))
-            .finally(() => dispatch(setIsLoading(false)))
+        const snapshot = await uploadBytes(fileRef, file);
+        const photoURL = await getDownloadURL(fileRef);
+        updateProfile(auth.currentUser, { photoURL }).then(() => {
+            setUpdateCount(updateCount + 1);
+        }).catch(e => console.log(e.message))
+        dispatch(setIsLoading(false));
+        console.log(snapshot);
     }
 
     const userRegister = (name, photoURL, email, password) => {
@@ -67,10 +70,10 @@ export const useFirebase = () => {
 
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (result) => {
             // dispatch(setIsLoading(true));
-            if (user) {
-                dispatch(login({ ...user }))
+            if (result) {
+                dispatch(login({ ...result }))
             }
             else {
                 dispatch(login({}))
@@ -78,13 +81,13 @@ export const useFirebase = () => {
             dispatch(setIsLoading(false));
         })
         return () => unsubscribe;
-    }, [])
+    }, [updateCount, auth])
 
     return {
         logIn,
         logOut,
         Redirect,
+        uploadAvatar,
         userRegister,
-        signWithGoogle,
     }
 }

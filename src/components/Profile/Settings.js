@@ -5,6 +5,7 @@ import { Box } from '@mui/system';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice';
+import { useFirebase } from '../../Hooks/useFirebase';
 
 const theme = createTheme();
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         background: 'rgba(68, 67, 67, 0.45)',
         // boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        backdropFilter: 'blur(15px)'
+        backdropFilter: 'blur(12px)'
     },
     imgContainer: ({ photoURL }) => ({
         position: 'relative',
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = () => {
     const user = useSelector(selectUser)
+    const { uploadAvatar } = useFirebase();
     const [userNewData, setUserNewData] = useState({});
 
     const handleChangeData = (e) => {
@@ -54,7 +56,8 @@ const Settings = () => {
     }
 
     const HandleSelectImg = (e) => {
-        console.log(e);
+        const img = e.target.files[0];
+        uploadAvatar(img);
     }
 
     const classes = useStyles(user);
