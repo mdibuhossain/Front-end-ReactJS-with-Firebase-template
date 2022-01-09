@@ -12,8 +12,8 @@ const Settings = () => {
     const useStyles = makeStyles({
         cover: {
             position: 'relative',
-            width: '500px',
-            height: '350px',
+            width: '100%',
+            height: '280px',
             background: `url(${user?.photoURL}) center center / cover`
         },
         coverOverlay: {
@@ -27,10 +27,16 @@ const Settings = () => {
             backdropFilter: 'blur(15px)'
         },
         imgContainer: {
-            width: '200px',
-            height: '200px',
+            position: 'relative',
+            width: '150px',
+            height: '150px',
             borderRadius: '50%',
             background: `url(${user?.photoURL}) center center / cover`,
+        },
+        uploadIconContainer: {
+            position: 'absolute',
+            bottom: '8px',
+            right: '0',
         },
         uploadIcon: {
             background: 'rgb(79, 77, 77) !important',
@@ -41,11 +47,11 @@ const Settings = () => {
 
     return (
         <Box style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <Box sx={{ boxShadow: '8px 8px 20px #C0C0C0' }}>
+            <Box sx={{ boxShadow: '8px 8px 20px #C0C0C0', border: '1px solid black', width: { xs: 0.9, sm: 0.4, md: 0.3 } }}>
                 <Box className={classes.cover}>
                     <Box className={classes.coverOverlay}>
                         <Box className={classes.imgContainer}>
-                            <label htmlFor="icon-button-file">
+                            <label htmlFor="icon-button-file" className={classes.uploadIconContainer}>
                                 <Input accept="image/*" id="icon-button-file" type="file" style={{ display: 'none' }} />
                                 <IconButton className={classes.uploadIcon} aria-label="upload picture" component="span">
                                     <PhotoCamera />
