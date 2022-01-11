@@ -11,11 +11,9 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link, Outlet, Route, Routes, useMatch } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { useFirebase } from '../../Hooks/useFirebase';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../features/userSlice';
-import AddProduct from './AddProduct';
+import useAuth from '../../Hooks/useAuth';
 // import Pay from '../Components/Dashboard/Pay';
 // import MyOrder from '../Components/Dashboard/MyOrder';
 // import AddReview from '../Components/Dashboard/AddReview';
@@ -30,9 +28,8 @@ const drawerWidth = 250;
 export default function Dashboard(props) {
     // let test = useMatch();
     // console.log(test);
-    const url = '';
-    const { logOut } = useFirebase();
-    const dispatch = useDispatch();
+    const { logOut } = useAuth();
+    // const { logOut } = useFirebase();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 

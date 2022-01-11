@@ -18,6 +18,7 @@ import { selectUser } from '../features/userSlice';
 import { selectIsLoading } from '../features/isloadingSlice';
 import { NavLink, useLocation } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import useAuth from '../Hooks/useAuth';
 
 const pages = [
     { title: 'Home', to: '/home' },
@@ -38,10 +39,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navigation = () => {
-    const { logOut } = useFirebase();
+    const { logOut, user, isLoading } = useAuth();
+    // const { logOut, user, isLoading } = useFirebase();
     const location = useLocation();
-    const user = useSelector(selectUser);
-    const isLoading = useSelector(selectIsLoading)
+    // const user = useSelector(selectUser);
+    // const isLoading = useSelector(selectIsLoading)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 

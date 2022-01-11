@@ -7,12 +7,14 @@ import { useFirebase } from '../../Hooks/useFirebase';
 import { selectIsLoading } from '../../features/isloadingSlice';
 import { selectUser } from '../../features/userSlice';
 import gym1 from '../../assets/gym1.jpg';
+import useAuth from '../../Hooks/useAuth';
 
 const Login = () => {
-    const { logIn, Redirect } = useFirebase();
+    const { logIn, Redirect, user, isLoading } = useAuth();
+    // const { logIn, Redirect, user, isLoading } = useFirebase();
     const [userInput, setUserInput] = useState({});
-    const isLoading = useSelector(selectIsLoading);
-    const user = useSelector(selectUser);
+    // const isLoading = useSelector(selectIsLoading);
+    // const user = useSelector(selectUser);
     useEffect(() => {
         if (user.email)
             Redirect();

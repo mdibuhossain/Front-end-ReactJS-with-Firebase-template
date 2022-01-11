@@ -9,10 +9,11 @@ import register1 from '../../assets/register1.jpg';
 import { selectIsLoading } from '../../features/isloadingSlice';
 
 const Register = () => {
-    const { userRegister, Redirect } = useFirebase();
+    const { userRegister, Redirect, isLoading, user } = useFirebase();
+    // const { userRegister, Redirect } = useFirebase();
     const [userInput, setUserInput] = useState({});
-    const isLoading = useSelector(selectIsLoading);
-    const user = useSelector(selectUser);
+    // const isLoading = useSelector(selectIsLoading);
+    // const user = useSelector(selectUser);
     useEffect(() => {
         if (user.email)
             Redirect();

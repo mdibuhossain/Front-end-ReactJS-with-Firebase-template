@@ -3,9 +3,11 @@ import { Box } from '@mui/system';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import React from 'react';
 import { useFirebase } from '../../Hooks/useFirebase';
+import useAuth from '../../Hooks/useAuth';
 
 const PageNotFound = () => {
-    const { Redirect } = useFirebase();
+    const { Redirect } = useAuth();
+    // const { Redirect } = useFirebase();
     return (
         <Box sx={{
             height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'

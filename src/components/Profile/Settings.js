@@ -5,6 +5,7 @@ import { Box } from '@mui/system';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice';
+import useAuth from '../../Hooks/useAuth';
 import { useFirebase } from '../../Hooks/useFirebase';
 
 const theme = createTheme();
@@ -45,8 +46,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Settings = () => {
-    const user = useSelector(selectUser)
-    const { uploadAvatar } = useFirebase();
+    const { user, uploadAvatar } = useAuth();
+    // const user = useSelector(selectUser)
+    // const { uploadAvatar } = useFirebase();
     const [userNewData, setUserNewData] = useState({});
 
     const handleChangeData = (e) => {

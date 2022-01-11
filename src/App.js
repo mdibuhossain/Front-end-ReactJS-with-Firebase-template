@@ -16,28 +16,31 @@ import ManageProducts from './components/Dashboard/ManageProducts';
 import ManageOrders from './components/Dashboard/ManageOrders';
 import Login from './components/Login/Login';
 import Settings from './components/Profile/Settings';
+import AuthContext from './Context/AuthContext';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/settings" element={<RequireAuth><Settings /></RequireAuth>} />
-          <Route path="/dashboard" element={<RequireAuth>
-            <Dashboard />
-          </RequireAuth>}>
-            <Route path="/dashboard" element={<ManageOrders />} />
-            <Route path="/dashboard/manageproducts" element={<ManageProducts />} />
-            <Route path="/dashboard/addproduct" element={<AddProduct />} />
-          </Route>
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-        <Footer />
+        <AuthContext>
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/settings" element={<RequireAuth><Settings /></RequireAuth>} />
+            <Route path="/dashboard" element={<RequireAuth>
+              <Dashboard />
+            </RequireAuth>}>
+              <Route path="/dashboard" element={<ManageOrders />} />
+              <Route path="/dashboard/manageproducts" element={<ManageProducts />} />
+              <Route path="/dashboard/addproduct" element={<AddProduct />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </AuthContext>
       </BrowserRouter>
     </div>
   );
