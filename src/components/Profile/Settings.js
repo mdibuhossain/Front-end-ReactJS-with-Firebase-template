@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
         placeItems: 'center',
         width: '100%',
         height: '100%',
-        background: 'rgba(68, 67, 67, 0.45)',
+        background: 'rgba(12, 12, 12, 0.4)',
         // boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        backdropFilter: 'blur(12px)'
+        backdropFilter: 'blur(5px)'
     },
     imgContainer: ({ photoURL }) => ({
         position: 'relative',
@@ -65,7 +65,7 @@ const Settings = () => {
     return (
         <ThemeProvider theme={theme}>
             <Box style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <Box sx={{ boxShadow: '8px 8px 20px #C0C0C0', width: { xs: 0.9, sm: 0.4, md: 0.3 } }}>
+                <Box sx={{ boxShadow: '8px 8px 20px #C0C0C0', width: { xs: 0.9, sm: 0.4, md: 0.21 } }}>
                     <Box className={classes.cover}>
                         <Box className={classes.coverOverlay}>
                             <Box className={classes.imgContainer}>
