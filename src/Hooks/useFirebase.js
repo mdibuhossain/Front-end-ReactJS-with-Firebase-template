@@ -24,6 +24,14 @@ export const useFirebase = () => {
         navigate(destination);
     }
 
+    const updateName = async (displayName) => {
+        setIsLoading(true);
+        updateProfile(auth.currentUser, { displayName })
+            .then(() => setUpdateCount(updateCount + 1))
+            .catch(e => console.log(e.message))
+            .finally(() => setIsLoading(false))
+    }
+
     const uploadAvatar = async (file) => {
         const fileRef = ref(storage, 'avatar/' + auth?.currentUser?.uid + '.png');
         setIsLoading(true);
@@ -32,11 +40,9 @@ export const useFirebase = () => {
         const photoURL = await getDownloadURL(fileRef);
         updateProfile(auth.currentUser, { photoURL })
             .then(() => setUpdateCount(updateCount + 1))
-            .then(() => setUser(auth.currentUser))
             .catch(e => console.log(e.message))
-        setIsLoading(false);
+            .finally(() => setIsLoading(false))
         // dispatch(setIsLoading(false));
-        console.log(snapshot);
     }
 
     const userRegister = (name, photoURL, email, password) => {
@@ -92,7 +98,7 @@ export const useFirebase = () => {
         const unsubscribe = onAuthStateChanged(auth, (result) => {
             // dispatch(setIsLoading(true));
             if (result) {
-                setUser({ ...result });
+                setUser(result);
                 // dispatch(login({ ...result }))
             }
             else {
@@ -107,13 +113,14 @@ export const useFirebase = () => {
 
     return {
         user,
-        setUser,
         logIn,
         logOut,
+        setUser,
         Redirect,
         isLoading,
-        uploadAvatar,
+        updateName,
         setIsLoading,
+        uploadAvatar,
         userRegister,
     }
 }

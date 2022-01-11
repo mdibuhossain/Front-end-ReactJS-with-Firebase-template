@@ -46,15 +46,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Settings = () => {
-    const { user, uploadAvatar } = useAuth();
+    const { user, uploadAvatar, updateName } = useAuth();
     // const user = useSelector(selectUser)
     // const { uploadAvatar } = useFirebase();
-    const [userNewData, setUserNewData] = useState({});
+    const [userNewName, setUserNewName] = useState('');
 
-    const handleChangeData = (e) => {
-        const tmp = { ...userNewData };
-        tmp[e.target.name] = e.target.value;
-        setUserNewData(tmp);
+    const handleSubmitNewName = () => {
+        updateName(userNewName);
     }
 
     const HandleSelectImg = (e) => {
@@ -82,9 +80,9 @@ const Settings = () => {
                     </Box>
                     <form>
                         <Box sx={{ m: 3, display: 'grid', rowGap: '25px' }}>
-                            <TextField onChange={handleChangeData} defaultValue={userNewData?.displayName} name="displayName" label="New name" variant="outlined" />
+                            <TextField onChange={(e) => setUserNewName(e.target.value)} defaultValue={userNewName} name="displayName" label="New name" variant="outlined" />
                             {/* <TextField label="Photo URL (optional)" variant="outlined" /> */}
-                            <Button disabled={!userNewData?.displayName} variant="contained">Update</Button>
+                            <Button onClick={handleSubmitNewName} disabled={!userNewName} variant="contained">Update</Button>
                         </Box>
                     </form>
                 </Box>
