@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "fitness-26c3f"
-  }
+    "default": "authtemplate24",
+    "staging": "authtemplate24"
+  },
+  "targets": {}
 }

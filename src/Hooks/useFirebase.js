@@ -17,6 +17,7 @@ export const useFirebase = () => {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const storage = getStorage();
+    const [update, setUpdate] = useState(0);
     const Redirect = () => {
         console.log(location);
         const destination = location?.state?.from?.pathname || '/';
@@ -24,8 +25,11 @@ export const useFirebase = () => {
     }
 
     const updateNewName = (displayName) => {
-        updateProfile(auth.currentUser, { displayName })
-            .then(() => console.log('new name updated'))
+        updateProfile(auth?.currentUser, { displayName })
+            .then(() => {
+                console.log('new name updated')
+                setUpdate(update + 1)
+            })
             .catch((e) => console.log(e.message))
             .finally(() => dispatch(login({ ...user, displayName })))
     }
@@ -36,9 +40,8 @@ export const useFirebase = () => {
         const snapshot = await uploadBytes(fileRef, file);
         const photoURL = await getDownloadURL(fileRef);
         updateProfile(auth?.currentUser, { photoURL })
-            .then(() => {
-                console.log('avatar uploaded');
-            }).catch(e => console.log(e.message))
+            .then(() => console.log('avatar uploaded'))
+            .catch(e => console.log(e.message))
             .finally(() => dispatch(login({ ...user, photoURL })))
         dispatch(setIsLoading(false));
     }
@@ -82,8 +85,9 @@ export const useFirebase = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (result) => {
+            console.log(result);
             if (result) {
-                dispatch(login({ ...result.providerData[0] }))
+                dispatch(login({ ...result?.providerData[0] }))
             }
             else {
                 dispatch(login({}))
@@ -91,7 +95,7 @@ export const useFirebase = () => {
             dispatch(setIsLoading(false));
         })
         return () => unsubscribe;
-    }, [auth])
+    }, [auth, update])
 
     return {
         logIn,
