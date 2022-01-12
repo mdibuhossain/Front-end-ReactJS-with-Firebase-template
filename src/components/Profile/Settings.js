@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         width: '100%',
         height: '280px',
-        background: `url(${photoURL}) center center / cover`
+        background: `url(${photoURL || `http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=320`}) center center / cover`
     }),
     coverOverlay: {
         position: 'absolute',
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         width: '150px',
         height: '150px',
         borderRadius: '50%',
-        background: `url(${photoURL}) center center / cover`,
+        background: `url(${photoURL || `http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=320`}) center center / cover`,
     }),
     uploadIconContainer: {
         position: 'absolute',
@@ -46,18 +46,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = () => {
     const user = useSelector(selectUser)
-    const { uploadAvatar } = useFirebase();
-    const [userNewData, setUserNewData] = useState({});
-
-    const handleChangeData = (e) => {
-        const tmp = { ...userNewData };
-        tmp[e.target.name] = e.target.value;
-        setUserNewData(tmp);
-    }
+    const { uploadAvatar, updateNewName } = useFirebase();
+    const [newName, setNewName] = useState('');
 
     const HandleSelectImg = (e) => {
         const img = e.target.files[0];
         uploadAvatar(img);
+    }
+
+    const handleChangeName = () => {
+        updateNewName(newName);
     }
 
     const classes = useStyles(user);
@@ -80,9 +78,9 @@ const Settings = () => {
                     </Box>
                     <form>
                         <Box sx={{ m: 3, display: 'grid', rowGap: '25px' }}>
-                            <TextField onChange={handleChangeData} defaultValue={userNewData?.displayName} name="displayName" label="New name" variant="outlined" />
+                            <TextField onChange={(e) => setNewName(e.target.value)} defaultValue={newName} name="displayName" label="New name" variant="outlined" />
                             {/* <TextField label="Photo URL (optional)" variant="outlined" /> */}
-                            <Button disabled={!userNewData?.displayName} variant="contained">Update</Button>
+                            <Button onClick={handleChangeName} disabled={!newName} variant="contained">Update</Button>
                         </Box>
                     </form>
                 </Box>

@@ -38,11 +38,11 @@ const Login = () => {
                             </Box>
                             <FormControl variant="standard">
                                 <InputLabel>Email</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.email} name="email" type="email" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.email} name="email" type="email" />
                             </FormControl>
                             <FormControl variant="standard" sx={{ mt: 3 }}>
                                 <InputLabel>Password</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.password} name="password" type="password" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.password} name="password" type="password" />
                             </FormControl>
                             <Button type="submit" variant="contained" sx={{ mt: 8 }}>
                                 {

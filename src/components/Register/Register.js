@@ -44,23 +44,23 @@ const Register = () => {
                             </Box>
                             <FormControl variant="standard">
                                 <InputLabel>Full Name</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.name} name="name" type="text" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.name} name="name" type="text" />
                             </FormControl>
                             <FormControl variant="standard" sx={{ mt: 2 }}>
                                 <InputLabel>Email</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.email} name="email" type="email" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.email} name="email" type="email" />
                             </FormControl>
                             <FormControl variant="standard" sx={{ mt: 2 }}>
                                 <InputLabel>Password</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.password} name="password" type="password" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.password} name="password" type="password" />
                             </FormControl>
                             <FormControl variant="standard" sx={{ mt: 2 }}>
                                 <InputLabel>Confirm Password</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.confirmPassword} name="confirmPassword" type="password" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.confirmPassword} name="confirmPassword" type="password" />
                             </FormControl>
                             <FormControl variant="standard" sx={{ mt: 2 }}>
                                 <InputLabel>Profile Photo URL (optional)</InputLabel>
-                                <Input onChange={handleUserInput} value={userInput.photoURL} name="photoURL" type="text" />
+                                <Input onChange={handleUserInput} defaultValue={userInput.photoURL} name="photoURL" type="text" />
                             </FormControl>
                             <Button type="submit" variant="contained" sx={{ mt: 5 }}>
                                 {

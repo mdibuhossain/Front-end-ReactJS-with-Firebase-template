@@ -1,10 +1,11 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { setIsLoading } from '../features/isloadingSlice';
-import { login, logout } from '../features/userSlice';
+import { login, logout, selectUser } from '../features/userSlice';
 import initAuth from '../Firebase/initAuth';
 
 initAuth();
@@ -14,7 +15,7 @@ export const useFirebase = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [updateCount, setUpdateCount] = useState(0);
+    const user = useSelector(selectUser);
     const storage = getStorage();
     const Redirect = () => {
         console.log(location);
@@ -22,16 +23,24 @@ export const useFirebase = () => {
         navigate(destination);
     }
 
+    const updateNewName = (displayName) => {
+        updateProfile(auth.currentUser, { displayName })
+            .then(() => console.log('new name updated'))
+            .catch((e) => console.log(e.message))
+            .finally(() => dispatch(login({ ...user, displayName })))
+    }
+
     const uploadAvatar = async (file) => {
         const fileRef = ref(storage, 'avatar/' + auth?.currentUser?.uid + '.png');
         dispatch(setIsLoading(true));
         const snapshot = await uploadBytes(fileRef, file);
         const photoURL = await getDownloadURL(fileRef);
-        updateProfile(auth.currentUser, { photoURL }).then(() => {
-            setUpdateCount(updateCount + 1);
-        }).catch(e => console.log(e.message))
+        updateProfile(auth?.currentUser, { photoURL })
+            .then(() => {
+                console.log('avatar uploaded');
+            }).catch(e => console.log(e.message))
+            .finally(() => dispatch(login({ ...user, photoURL })))
         dispatch(setIsLoading(false));
-        console.log(snapshot);
     }
 
     const userRegister = (name, photoURL, email, password) => {
@@ -41,7 +50,9 @@ export const useFirebase = () => {
                 updateProfile(auth.currentUser, {
                     displayName: name, photoURL
                 }).then(() => { })
-                dispatch(login({ displayName: name, email, photoURL }));
+                console.log(result?.user);
+                dispatch(login(result?.user));
+                // dispatch(login({ displayName: name, email, photoURL }));
                 Redirect();
             }).catch(error => alert(error.message))
             .finally(() => dispatch(setIsLoading(false)))
@@ -51,7 +62,7 @@ export const useFirebase = () => {
         dispatch(setIsLoading(true));
         signInWithEmailAndPassword(auth, email, password)
             .then(userAuth => {
-                dispatch(login({ ...userAuth?.user }));
+                dispatch(login({ ...userAuth.user }));
                 Redirect();
             }).catch(error => alert(error.message))
             .finally(() => dispatch(setIsLoading(false)))
@@ -71,9 +82,8 @@ export const useFirebase = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (result) => {
-            // dispatch(setIsLoading(true));
             if (result) {
-                dispatch(login({ ...result }))
+                dispatch(login({ ...result.providerData[0] }))
             }
             else {
                 dispatch(login({}))
@@ -81,7 +91,7 @@ export const useFirebase = () => {
             dispatch(setIsLoading(false));
         })
         return () => unsubscribe;
-    }, [updateCount, auth])
+    }, [auth])
 
     return {
         logIn,
@@ -89,5 +99,6 @@ export const useFirebase = () => {
         Redirect,
         uploadAvatar,
         userRegister,
+        updateNewName
     }
 }
