@@ -32,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
         height: '150px',
         borderRadius: '50%',
         background: `url(${photoURL || `http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=320`}) center center / cover`,
+        // transition: '0.25s ease-out',
+        // '&:hover': {
+        //     transition: '0.325s ease-in',
+        //     boxShadow: '0 0 16px 1px rgba(160, 229, 255, 0.5)',
+        // }
     }),
     uploadIconContainer: {
         position: 'absolute',
@@ -54,8 +59,10 @@ const Settings = () => {
         uploadAvatar(img);
     }
 
-    const handleChangeName = () => {
+    const handleChangeName = (e) => {
         updateNewName(newName);
+        setNewName('');
+        e.preventDefault();
     }
 
     const classes = useStyles(user);
@@ -76,11 +83,10 @@ const Settings = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <form>
+                    <form onSubmit={handleChangeName}>
                         <Box sx={{ m: 3, display: 'grid', rowGap: '25px' }}>
                             <TextField onChange={(e) => setNewName(e.target.value)} defaultValue={newName} name="displayName" label="New name" variant="outlined" />
-                            {/* <TextField label="Photo URL (optional)" variant="outlined" /> */}
-                            <Button onClick={handleChangeName} disabled={!newName} variant="contained">Update</Button>
+                            <Button type="submit" onClick={handleChangeName} disabled={!newName} variant="contained">Update</Button>
                         </Box>
                     </form>
                 </Box>

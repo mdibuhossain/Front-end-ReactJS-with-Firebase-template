@@ -159,7 +159,7 @@ const Navigation = () => {
                         {
                             user?.email ? (
                                 <Box sx={{ flexGrow: 0 }}>
-                                    <Typography variant='button' sx={{ display: 'inline', mr: 2 }}>{user.displayName}</Typography>
+                                    <Typography sx={{ display: 'inline', mr: 2, letterSpacing: '0.25px' }}>{user.displayName}</Typography>
                                     <Tooltip title="Open settings">
                                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                             {isLoading ? <CircularProgress color="inherit" />
