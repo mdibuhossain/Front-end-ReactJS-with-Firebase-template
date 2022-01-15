@@ -1,5 +1,5 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -19,7 +19,6 @@ export const useFirebase = () => {
     const storage = getStorage();
     const [update, setUpdate] = useState(0);
     const Redirect = () => {
-        console.log(location);
         const destination = location?.state?.from?.pathname || '/';
         navigate(destination);
     }
@@ -37,7 +36,7 @@ export const useFirebase = () => {
     const uploadAvatar = async (file) => {
         const fileRef = ref(storage, 'avatar/' + auth?.currentUser?.uid + '.png');
         dispatch(setIsLoading(true));
-        const snapshot = await uploadBytes(fileRef, file);
+        const snapshot = await uploadString(fileRef, file, 'data_url');
         const photoURL = await getDownloadURL(fileRef);
         updateProfile(auth?.currentUser, { photoURL })
             .then(() => console.log('avatar uploaded'))
@@ -53,7 +52,6 @@ export const useFirebase = () => {
                 updateProfile(auth.currentUser, {
                     displayName: name, photoURL
                 }).then(() => { })
-                console.log(result?.user);
                 dispatch(login(result?.user));
                 // dispatch(login({ displayName: name, email, photoURL }));
                 Redirect();
@@ -72,7 +70,6 @@ export const useFirebase = () => {
     }
 
     const logOut = () => {
-        console.log('bal');
         dispatch(setIsLoading(true));
         signOut(auth)
             .then(() => {
@@ -85,7 +82,6 @@ export const useFirebase = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (result) => {
-            console.log(result);
             if (result) {
                 dispatch(login({ ...result?.providerData[0] }))
             }

@@ -25,6 +25,10 @@ html, body {
   margin: 0;
 }
 
+.img-preview {
+  overflow: hidden;
+}
+
 .footer-icon{
   display: flex;
   justify-content: center;
