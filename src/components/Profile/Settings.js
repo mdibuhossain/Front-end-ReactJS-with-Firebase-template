@@ -9,6 +9,7 @@ import { selectUser } from '../../features/userSlice';
 import { useFirebase } from '../../Hooks/useFirebase';
 import { BiZoomIn, BiZoomOut } from 'react-icons/bi';
 import { ImCross } from 'react-icons/im';
+import { AiOutlineRotateLeft, AiOutlineRotateRight } from 'react-icons/ai';
 
 const theme = createTheme();
 
@@ -87,6 +88,7 @@ const Settings = () => {
     const [newName, setNewName] = useState('');
     const [open, setOpen] = React.useState(false);
     const [scale, setScale] = useState(1);
+    const [rotate, setRotate] = useState(0);
     const EditorRef = useRef(null);
 
 
@@ -154,14 +156,20 @@ const Settings = () => {
                             height={250}
                             border={35}
                             borderRadius={0}
+                            rotate={rotate}
                             scale={scale}
-                            color={[89, 72, 72, 0.5]}
+                            color={[89, 72, 72, 0.8]}
                         />
                     </Box>
                     <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
                         <BiZoomIn style={{ fontSize: '2rem' }} />
                         <Slider min={0.92} max={10} step={0.01} onChange={(e) => setScale(e.target.value)} />
                         <BiZoomOut style={{ fontSize: '2rem' }} />
+                    </Stack>
+                    <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+                        <AiOutlineRotateLeft style={{ fontSize: '2rem' }} />
+                        <Slider min={0} max={360} step={0.5} onChange={(e) => setRotate(e.target.value)} />
+                        <AiOutlineRotateRight style={{ fontSize: '2rem' }} />
                     </Stack>
                 </DialogContent>
                 <DialogActions>
